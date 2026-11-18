@@ -1,13 +1,12 @@
-/* Vaelos Silicon download page. No external fonts or scripts (see vercel.json CSP). */
+/* Vaelos Silicon download page: jet black, blood red accents. No external fonts or scripts (see vercel.json CSP). */
 :root {
-  --bg: #070912;
-  --panel: #0d1120;
-  --line: #1c2340;
-  --text: #e7eaf6;
-  --muted: #8d95b5;
-  --cyan: #22d3ee;
-  --violet: #8b5cf6;
-  --magenta: #ec4899;
+  --bg: #000000;
+  --panel: #0a0a0a;
+  --line: #1f1f1f;
+  --text: #ededed;
+  --muted: #9a9a9a;
+  --red: #a30f17;        /* fills: button, rules, markers */
+  --red-text: #e0353d;   /* red that stays readable as small text on black */
   --mono: ui-monospace, "SF Mono", Menlo, monospace;
   color-scheme: dark;
 }
@@ -16,124 +15,105 @@
 
 body {
   margin: 0;
-  background:
-    radial-gradient(900px 500px at 50% -120px, rgba(139, 92, 246, 0.28), transparent 70%),
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px,
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px) 0 0 / 40px 40px,
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
-  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif;
 }
 
-a { color: var(--cyan); text-decoration: none; }
-a:hover { text-decoration: underline; }
+a { color: var(--text); text-decoration: underline; text-decoration-color: var(--red); text-underline-offset: 3px; }
+a:hover { color: var(--red-text); }
 
 /* Navigation */
 .nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1040px;
+  max-width: 880px;
   margin: 0 auto;
-  padding: 18px 20px;
+  padding: 20px;
+  border-bottom: 1px solid var(--line);
 }
-.brand { display: flex; gap: 10px; align-items: center; color: var(--text); font-weight: 700; }
-.nav nav { display: flex; gap: 20px; }
-.nav nav a { color: var(--muted); }
+.brand { display: flex; gap: 10px; align-items: center; font-weight: 700; text-decoration: none; }
+.nav nav { display: flex; gap: 22px; }
+.nav nav a { color: var(--muted); text-decoration: none; }
+.nav nav a:hover { color: var(--text); }
 
-main { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+main { max-width: 880px; margin: 0 auto; padding: 0 20px; }
 
 /* Hero */
-.hero { text-align: center; padding: 56px 0 32px; }
-.hero-logo { filter: drop-shadow(0 18px 60px rgba(139, 92, 246, 0.55)); }
-.eyebrow { font-family: var(--mono); color: var(--cyan); letter-spacing: 0.12em; font-size: 13px; margin: 28px 0 8px; }
-h1 { font-size: clamp(34px, 6vw, 60px); line-height: 1.05; margin: 0 0 20px; letter-spacing: -0.02em; }
-.neon {
-  background: linear-gradient(90deg, var(--cyan), var(--violet) 55%, var(--magenta));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.lede { max-width: 680px; margin: 0 auto; color: var(--muted); font-size: 18px; }
-.cta { margin-top: 32px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.hero { padding: 72px 0 40px; }
+.hero-logo { display: block; margin-bottom: 32px; }
+h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.1; margin: 0 0 18px; letter-spacing: -0.02em; }
+.lede { max-width: 640px; margin: 0; color: var(--muted); font-size: 18px; }
+.cta { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
 .button {
   display: inline-block;
-  padding: 15px 34px;
-  border-radius: 12px;
-  background: linear-gradient(90deg, var(--cyan), var(--violet));
-  color: #05070d;
-  font-weight: 800;
-  font-size: 17px;
-  box-shadow: 0 10px 40px rgba(34, 211, 238, 0.25);
+  padding: 14px 28px;
+  border-radius: 4px;
+  background: var(--red);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
 }
-.button:hover { text-decoration: none; filter: brightness(1.08); }
+.button:hover { background: #8a0c13; color: #ffffff; }
 .meta { font-family: var(--mono); font-size: 13px; color: var(--muted); }
 
-/* Stats */
+/* Results */
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  margin-top: 40px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
-.stats div { background: var(--panel); padding: 22px 16px; text-align: center; }
-.stats b { display: block; font-family: var(--mono); font-size: 28px; color: var(--text); }
+.stats div { padding: 22px 0; }
+.stats b { display: block; font-family: var(--mono); font-size: 26px; font-weight: 600; }
 .stats span { color: var(--muted); font-size: 14px; }
-.footnote { text-align: center; color: var(--muted); font-size: 13px; }
+.footnote { color: var(--muted); font-size: 13px; }
 
 /* Sections */
 section { margin: 64px 0; }
-h2 { font-size: 26px; margin: 0 0 18px; }
-h2::before { content: "// "; font-family: var(--mono); color: var(--violet); }
-
-.lane { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0; }
-.lane i { color: var(--muted); font-style: normal; }
-.chip {
-  font-family: var(--mono);
-  font-size: 13px;
-  padding: 7px 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--panel);
+h2 {
+  font-size: 22px;
+  margin: 0 0 18px;
+  padding-left: 12px;
+  border-left: 3px solid var(--red);
 }
-.chip.accent { border-color: var(--violet); color: #c9b6ff; box-shadow: 0 0 18px rgba(139, 92, 246, 0.35); }
 
-.points { padding-left: 18px; color: var(--muted); }
-.points li { margin: 8px 0; }
-.points b { color: var(--text); }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 500; }
+td code { color: var(--text); }
 
-.steps ol { padding-left: 22px; }
-.steps li { margin: 14px 0; color: var(--muted); }
-.steps li b { color: var(--text); }
+ul, ol { padding-left: 20px; color: var(--muted); }
+li { margin: 10px 0; }
+li::marker { color: var(--red-text); }
+li b, p b { color: var(--text); }
 
 code, pre { font-family: var(--mono); font-size: 13.5px; }
-li code, p code { display: inline-block; padding: 2px 8px; border-radius: 6px; background: var(--panel); border: 1px solid var(--line); color: var(--text); }
-.steps li code { display: block; width: fit-content; margin-top: 8px; }
-pre { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; overflow-x: auto; color: var(--text); }
+li code, p code { padding: 1px 6px; border-radius: 3px; background: var(--panel); border: 1px solid var(--line); color: var(--text); }
+li > code:last-child { display: block; width: fit-content; margin-top: 8px; }
+pre { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--red); border-radius: 3px; padding: 14px 16px; overflow-x: auto; color: var(--text); }
 
-details { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); padding: 14px 18px; margin: 10px 0; }
+details { border-bottom: 1px solid var(--line); padding: 14px 0; }
 summary { cursor: pointer; font-weight: 600; }
+summary::marker { color: var(--red-text); }
 details p { color: var(--muted); margin: 10px 0 0; }
 
-footer { border-top: 1px solid var(--line); margin-top: 80px; padding: 28px 20px; text-align: center; color: var(--muted); font-size: 13px; }
+footer { max-width: 880px; margin: 80px auto 0; padding: 28px 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 
 @media (max-width: 720px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
-  .nav nav { gap: 14px; font-size: 14px; }
-  .hero { padding-top: 32px; }
+  .hero { padding-top: 40px; }
 }
 
 /* Phones: keep everything inside the viewport. */
 @media (max-width: 520px) {
   .nav { padding: 14px 16px; }
+  .nav nav { gap: 14px; font-size: 14px; }
   .nav nav a[href="#verify"] { display: none; }
   main { padding: 0 16px; }
   h1 { font-size: 32px; }
   .lede { font-size: 16px; }
-  .stats b { font-size: 22px; }
+  .stats b { font-size: 20px; }
   pre code { white-space: pre-wrap; word-break: break-all; }
 }
