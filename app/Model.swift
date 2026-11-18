@@ -5,6 +5,7 @@ import Foundation
 /// How far this Mac is from being able to play (the word scripts/status.sh prints).
 enum SetupState: String {
     case checking
+    case noRosetta = "no-rosetta"
     case noWhisky = "no-whisky"
     case noEngine = "no-engine"
     case noBottle = "no-bottle"
@@ -60,14 +61,6 @@ final class Model: ObservableObject {
             let word = output.trimmingCharacters(in: .whitespacesAndNewlines)
             self?.setup = SetupState(rawValue: word) ?? .checking
         })
-    }
-
-    func openWhiskyDownload() {
-        NSWorkspace.shared.open(URL(string: "https://github.com/frankea/Whisky/releases/latest")!)
-    }
-
-    func openWhisky() {
-        NSWorkspace.shared.open(URL(fileURLWithPath: "/Applications/Whisky.app"))
     }
 
     func runSetup() {

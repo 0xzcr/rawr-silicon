@@ -60,22 +60,27 @@ struct ContentView: View {
                 ProgressView().controlSize(.small)
                 Text("Checking this Mac…").foregroundStyle(.secondary)
             }
-        case .noWhisky:
-            Text("Vaelos runs CS2 on Whisky's free Wine engine. Install Whisky first:")
-            Text(verbatim: "brew install --cask frankea/whisky/whisky")
-                .font(.callout.monospaced())
-                .textSelection(.enabled)
-            Button("Download Whisky", action: model.openWhiskyDownload)
-        case .noEngine:
-            Text("Open Whisky once so it can download its Wine engine (about 480 MB), then come back here.")
-            Button("Open Whisky", action: model.openWhisky)
-        case .noBottle, .noSteam:
-            Text("Create a Windows environment and install Steam from Valve. Takes about two minutes.")
+        case .noRosetta, .noWhisky, .noEngine, .noBottle, .noSteam:
+            Text(setupExplanation)
             Button("Set up", action: model.runSetup)
                 .buttonStyle(.borderedProminent)
                 .disabled(model.setupRunning)
         case .ready:
             EmptyView()
+        }
+    }
+
+    /// What "Set up" will do from here, so a big download never comes as a surprise.
+    private var setupExplanation: String {
+        switch model.setup {
+        case .noRosetta:
+            return "Installs Rosetta 2 (macOS asks for your password once), the Whisky Wine engine (about 470 MB), "
+                + "a Windows environment, and Steam from Valve. About five minutes."
+        case .noWhisky, .noEngine:
+            return "Downloads the Whisky Wine engine (about 470 MB), creates a Windows environment, "
+                + "and installs Steam from Valve. About five minutes."
+        default:
+            return "Creates a Windows environment and installs Steam from Valve. About two minutes."
         }
     }
 

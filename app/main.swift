@@ -2,7 +2,7 @@
 // The app is a thin front end: the real work lives in Contents/Resources/scripts.
 //
 // Developer flags:
-//   --snapshot out.png [dark] [sharp] [setup=no-whisky|no-engine|no-bottle|no-steam|ready]
+//   --snapshot out.png [dark] [sharp] [setup=no-rosetta|no-whisky|no-engine|no-bottle|no-steam|ready]
 //   --mic-test      run the mic test headlessly and print the result
 //   --analyze file.wav [skip_seconds]   analyse a saved tone recording
 import AppKit
