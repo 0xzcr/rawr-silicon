@@ -27,6 +27,8 @@ stutter, wrong-resolution fullscreen, a black Steam window, and voice chat that 
 
 Full method and every run: [docs/RESULTS.md](docs/RESULTS.md).
 
+<p align="center"><img src="docs/screenshot.png" width="460" alt="Vaelos Silicon window"></p>
+
 ## What it does
 
 - **Per-process graphics routing.** `cs2.exe` loads DXMT (D3D11 → Metal) from its own folder through a
