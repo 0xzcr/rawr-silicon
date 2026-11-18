@@ -3,10 +3,18 @@
 # shellcheck disable=SC2034  # the variables here are used by the scripts that source this file
 #
 # Vaelos drives the Wine engine, DXMT and DXVK that Whisky (github.com/frankea/Whisky) installs.
-# It never modifies Whisky itself, and keeps its own state in ~/Library/Application Support/Vaelos Silicon.
+# It installs Whisky if needed but never modifies it, and keeps its own state in
+# ~/Library/Application Support/Vaelos Silicon.
 
-WHISKY_APP="/Applications/Whisky.app"
-WHISKY_CMD="$WHISKY_APP/Contents/Resources/WhiskyCmd"
+# Where apps are installed. Tests point this at a scratch folder.
+APPLICATIONS_DIR="${VAELOS_APPLICATIONS:-/Applications}"
+
+# Whisky.app in /Applications or ~/Applications; empty if it isn't installed.
+WHISKY_APP=""
+for candidate in "$APPLICATIONS_DIR/Whisky.app" "$HOME/Applications/Whisky.app"; do
+  if [ -x "$candidate/Contents/Resources/WhiskyCmd" ]; then WHISKY_APP="$candidate"; break; fi
+done
+WHISKY_CMD="${WHISKY_APP:+$WHISKY_APP/Contents/Resources/WhiskyCmd}"
 WHISKY_LIBS="$HOME/Library/Application Support/com.franke.Whisky/Libraries"
 WHISKY_BOTTLES="$HOME/Library/Containers/com.franke.Whisky/Bottles"
 
@@ -31,6 +39,42 @@ step() {
 fail() {
   echo "ERROR $*"
   exit 1
+}
+
+# Rosetta 2 is installed if an Intel binary can run.
+has_rosetta() {
+  /usr/bin/arch -x86_64 /usr/bin/true 2>/dev/null
+}
+
+# Downloads over HTTPS only and refuses the file unless its SHA-256 matches.
+# Prints "STEP <label> (N of TOTAL MB)" every two seconds while it runs.
+#   download <url> <output file> <sha256> <label> <expected MB>
+download() {
+  local url="$1" output="$2" expected_sha256="$3" label="$4" total_mb="$5"
+  step "$label"
+  # No downgrade to plain HTTP on redirect, TLS 1.2+, and an HTTP error fails instead of saving an error page.
+  # A connection that stalls (under 1 KB/s for a minute) fails instead of hanging Setup forever.
+  curl --fail --location --proto '=https' --proto-redir '=https' --tlsv1.2 --silent --show-error \
+    --retry 3 --connect-timeout 20 --speed-limit 1024 --speed-time 60 \
+    --output "$output" "$url" &
+  local curl_pid=$! bytes
+  while kill -0 "$curl_pid" 2>/dev/null; do
+    sleep 2
+    bytes="$(stat -f %z "$output" 2>/dev/null || echo 0)"
+    step "$label ($((bytes / 1048576)) of $total_mb MB)"
+  done
+  wait "$curl_pid" || fail "$label failed: check your internet connection and try again"
+
+  local actual_sha256
+  actual_sha256="$(shasum -a 256 "$output" | cut -d ' ' -f 1)"
+  [ "$actual_sha256" = "$expected_sha256" ] || fail "$label: the file doesn't match its published checksum, so it wasn't used"
+}
+
+# True if an app is intact and signed with an Apple-issued certificate belonging to this developer team.
+#   signed_by_team <app> <team id>
+signed_by_team() {
+  codesign --verify --deep --strict \
+    -R="anchor apple generic and certificate leaf[subject.OU] = \"$2\"" "$1" 2>/dev/null
 }
 
 # Prints the folder of the Whisky bottle named $BOTTLE_NAME; returns 1 if there is none.
