@@ -1,13 +1,16 @@
 #!/bin/bash
-# One-time setup: a Whisky bottle named "Vaelos" with Windows Steam installed in it.
+# One-time setup: Rosetta 2, Whisky and its Wine engine if missing, then a Whisky bottle named "Vaelos"
+# with Windows Steam installed in it.
 # Safe to run again: every finished step is skipped. Prints "STEP ..." lines that the app shows.
 set -euo pipefail
 source "$(dirname "$0")/common.sh"
 
 STEAM_INSTALLER_URL="https://cdn.cloudflare.steamstatic.com/client/installer/SteamSetup.exe"
 
-[ -x "$WHISKY_CMD" ] || fail "Whisky is not installed"
-[ -x "$WINE" ] || fail "Whisky's Wine engine is missing: open Whisky once so it can download it"
+# 0. Rosetta 2, Whisky and the Wine engine. Then re-read the paths, since Whisky may have just been installed.
+bash "$(dirname "$0")/install-deps.sh"
+source "$(dirname "$0")/common.sh"
+[ -n "$WHISKY_CMD" ] || fail "Whisky is not installed"
 
 # 1. The bottle (a self-contained Windows environment), created through Whisky so Whisky can manage it too.
 if ! find_bottle >/dev/null; then
