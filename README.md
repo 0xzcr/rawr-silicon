@@ -42,19 +42,23 @@ Full method and every run: [docs/RESULTS.md](docs/RESULTS.md).
 - **Voice-chat diagnostics.** Flags Bluetooth headset mics (16 kHz HFP) before you queue, switches input to the
   built-in mic in one click, and runs a tone-fit test *through Wine's own capture path* (`waveIn`/`WAVE_MAPPER`,
   what CS2 uses) to find dropouts and clicks in 10 ms windows.
+- **One-click setup.** Installs Rosetta 2, Whisky and its Wine engine, a Windows environment and Steam.
+  Downloads are pinned to tested versions and refused unless their SHA-256 matches and, for Whisky, Apple's
+  signature names Whisky's developer.
 - **VAC-safe by construction.** The app never passes `-insecure`; that flag only exists behind `TEST=1` in the
   benchmark harness.
 
 ## Install
 
-1. Install [Whisky](https://github.com/frankea/Whisky) (the free Wine engine Vaelos runs on):
-   `brew install --cask frankea/whisky/whisky`, then open it once so it downloads its engine.
-2. Download **Vaelos-Silicon.dmg** from [vaelos-silicon.vercel.app](https://vaelos-silicon.vercel.app) or
+1. Download **Vaelos-Silicon.dmg** from [vaelos-silicon.vercel.app](https://vaelos-silicon.vercel.app) or
    [Releases](https://github.com/0xzcr/vaelos-silicon/releases/latest), and check it:
    `shasum -a 256 Vaelos-Silicon.dmg` must match `SHA256SUMS`.
-3. Drag Vaelos Silicon to Applications. The build is ad-hoc signed, not notarized (no paid Apple Developer ID
+2. Drag Vaelos Silicon to Applications. The build is ad-hoc signed, not notarized (no paid Apple Developer ID
    yet), so the first launch needs **System Settings → Privacy & Security → Open Anyway**.
-4. Press **Set up** (creates the Windows environment and installs Steam from Valve), log in to Steam, press **Play**.
+3. Press **Set up**. It installs everything a fresh Mac is missing, about 470 MB and five minutes:
+   Rosetta 2 (macOS asks for your password), [Whisky](https://github.com/frankea/Whisky) and its Wine engine,
+   a Windows environment, and Steam from Valve.
+4. Log in to Steam, install CS2 when Steam asks, press **Play**.
 
 Requires Apple Silicon and macOS 14 or later.
 

@@ -26,6 +26,18 @@ Routing is per process, with no global overrides:
 
 `launch.sh` re-applies both on every launch, because a CS2 update or Steam file check can remove the files.
 
+## Setup sequence
+
+`setup.sh` runs `install-deps.sh`, then builds the bottle. Every step is skipped when already done.
+
+1. Rosetta 2 (`softwareupdate --install-rosetta`, through macOS's administrator prompt) if an x86_64 binary can't run.
+2. Whisky 3.10.2: download, SHA-256 check, mount read-only, `codesign -R` requirement on Whisky's team ID, `ditto` in.
+3. Wine engine 4.8.3 (`Libraries.tar.gz`, 457 MB): download, SHA-256 check, unpack next to Whisky's `Libraries`
+   folder and move it in one step.
+4. `WhiskyCmd create Vaelos`, `wineboot --init`, Steam's silent installer.
+
+Downloads stream `STEP … (N of M MB)` progress lines to the app and fail on a stall instead of hanging.
+
 ## Launch sequence
 
 1. `use_bottle` finds the bottle named `Vaelos` by its `Metadata.plist` and exports `WINEPREFIX` and
