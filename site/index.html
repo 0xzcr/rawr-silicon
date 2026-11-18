@@ -30,7 +30,7 @@
         voice chat static.</p>
       <div class="cta">
         <a class="button" href="https://github.com/0xzcr/vaelos-silicon/releases/latest/download/Vaelos-Silicon.dmg">Download for Mac</a>
-        <span class="meta">v0.1.0 · 2.2 MB · macOS 14+ · Apple Silicon · MIT</span>
+        <span class="meta">v0.2.0 · 2.2 MB · macOS 14+ · Apple Silicon · MIT</span>
       </div>
     </section>
 
@@ -60,13 +60,12 @@
     <section id="install" class="steps">
       <h2>Install</h2>
       <ol>
-        <li><b>Install Whisky</b>, the free Wine engine Vaelos runs on, then open it once so it downloads its engine (~480 MB).
-          <code>brew install --cask frankea/whisky/whisky</code></li>
         <li><b>Download</b> Vaelos-Silicon.dmg above and drag <b>Vaelos Silicon</b> into Applications.</li>
         <li><b>First launch:</b> this build isn't notarized by Apple yet, so macOS blocks it once. Open
           <b>System Settings → Privacy &amp; Security</b>, scroll to Security, and click <b>Open Anyway</b>.</li>
-        <li><b>Set up</b> creates the Windows environment and installs Steam from Valve. Log in to Steam,
-          press <b>Play</b>. Steam downloads CS2 (~60 GB) the first time.</li>
+        <li><b>Set up</b> installs everything a fresh Mac is missing: Rosetta 2, the Whisky Wine engine, a Windows
+          environment and Steam. About 470 MB and five minutes; macOS asks for your password only if Rosetta 2 is missing.</li>
+        <li><b>Log in to Steam</b>, install CS2 when Steam asks (about 60 GB), and press <b>Play</b>.</li>
       </ol>
     </section>
 
@@ -74,14 +73,16 @@
       <h2>Verify your download</h2>
       <p>Check the file is exactly what was published before you open it:</p>
       <pre><code>shasum -a 256 ~/Downloads/Vaelos-Silicon.dmg
-5e0689fd56f1a94ea7b54d4af8959d92b5eb387b5fb8f61524ee5b6a401478e1</code></pre>
+026fba2428b797729450984993668e311806888bec59481d86560b3b5118f3e4</code></pre>
       <p>After installing, the signature and its single entitlement (microphone) can be inspected:</p>
       <pre><code>codesign --verify --strict --verbose=2 "/Applications/Vaelos Silicon.app"
 codesign -d --entitlements - "/Applications/Vaelos Silicon.app"</code></pre>
       <ul class="points">
         <li><b>Hardened runtime</b>, ad-hoc signed. No JIT, no unsigned memory, no DYLD exceptions.</li>
-        <li><b>One network request</b>: Steam's installer from Valve's CDN over HTTPS during Setup. No telemetry.</li>
-        <li><b>No admin password</b>, ever. Writes only to its own Application Support folder and Whisky bottle.</li>
+        <li><b>Pinned, verified downloads.</b> Whisky and its Wine engine come from Whisky's GitHub releases and are
+          refused unless their SHA-256 matches the hash built into the app. Whisky must also carry its developer's Apple signature.</li>
+        <li><b>No telemetry.</b> The only downloads are the ones Set up makes, all over HTTPS.</li>
+        <li><b>No admin password</b>, except macOS's own prompt to install Apple's Rosetta 2 if it's missing.</li>
         <li><b>Open source</b>: every line that runs is in the <a href="https://github.com/0xzcr/vaelos-silicon">repository</a>.
           Report issues privately via <a href="https://github.com/0xzcr/vaelos-silicon/security">GitHub Security</a>.</li>
       </ul>
@@ -96,8 +97,8 @@ codesign -d --entitlements - "/Applications/Vaelos Silicon.app"</code></pre>
       </details>
       <details>
         <summary>Why does it need Whisky?</summary>
-        <p>Whisky ships a maintained, signed Wine 11 build with DXMT and DXVK. Vaelos drives it directly instead of
-          redistributing it, so you get Whisky's updates and Vaelos stays a 2 MB download.</p>
+        <p>Whisky ships a maintained, signed Wine 11 build with DXMT and DXVK. Set up downloads and checks it for you,
+          so there's nothing to install by hand, and Vaelos itself stays a 2 MB download.</p>
       </details>
       <details>
         <summary>My teammates hear static.</summary>
