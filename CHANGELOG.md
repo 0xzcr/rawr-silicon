@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+- Set up is fully automatic on a fresh Mac: installs Rosetta 2, Whisky and its Wine engine, then the bottle and Steam.
+- Pinned downloads with SHA-256 checks; Whisky is installed only if Apple's signature names its developer.
+- Download progress in the app; stalled downloads fail with a message instead of hanging.
+
 ## 0.1.0
 
 First release.
