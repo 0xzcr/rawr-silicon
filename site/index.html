@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vaelos Silicon</title>
+  <meta name="description" content="Counter-Strike 2 on Apple Silicon. Wine 11 + DXMT Direct3D 11 to Metal, persistent shader cache, Retina-native fullscreen. Free and open source.">
+  <meta name="theme-color" content="#070912">
+  <meta property="og:title" content="Vaelos Silicon">
+  <meta property="og:description" content="Counter-Strike 2 on Apple Silicon. Free, open source, one window.">
+  <link rel="icon" href="/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="/"><img src="/logo.svg" alt="" width="28" height="28"> Vaelos Silicon</a>
+    <nav>
+      <a href="#install">Install</a>
+      <a href="#verify">Verify</a>
+      <a href="https://github.com/0xzcr/vaelos-silicon">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <img class="hero-logo" src="/logo.svg" alt="Vaelos Silicon logo" width="168" height="168">
+      <p class="eyebrow">CS2 // Wine 11 // D3D11 → Metal</p>
+      <h1>Counter-Strike 2,<br><span class="neon">native-feeling on Apple Silicon.</span></h1>
+      <p class="lede">Vaelos runs the Windows build through Wine on Rosetta 2, translates Direct3D 11 straight to Metal
+        with DXMT, and fixes what makes CS2 feel bad on a Mac: shader stutter, wrong-resolution fullscreen,
+        a black Steam window, and voice chat that sounds like static.</p>
+      <div class="cta">
+        <a class="button" href="https://github.com/0xzcr/vaelos-silicon/releases/latest/download/Vaelos-Silicon.dmg">Download for Mac</a>
+        <span class="meta">v0.1.0 · 2.2 MB · Apple Silicon · macOS 14+ · free, MIT</span>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Measured results">
+      <div><b>132</b><span>avg fps</span></div>
+      <div><b>−94%</b><span>freezes vs. cold cache</span></div>
+      <div><b>3024×1964</b><span>native Retina fullscreen</span></div>
+      <div><b>0</b><span>mic glitches added by Wine</span></div>
+    </section>
+    <p class="footnote">M2 Max, Dust2, 10 bots, 60 s windows. <a href="https://github.com/0xzcr/vaelos-silicon/blob/main/docs/RESULTS.md">Method and every run →</a></p>
+
+    <section class="pipeline" aria-label="How it works">
+      <h2>Under the hood</h2>
+      <div class="lane">
+        <span class="chip">cs2.exe</span><i>→</i><span class="chip">Wine 11 · Rosetta 2</span><i>→</i><span class="chip accent">DXMT</span><i>→</i><span class="chip">Metal</span><i>→</i><span class="chip">Apple GPU</span>
+      </div>
+      <div class="lane">
+        <span class="chip">steamwebhelper.exe</span><i>→</i><span class="chip accent">DXVK</span><i>→</i><span class="chip">MoltenVK</span><i>→</i><span class="chip">Metal</span>
+      </div>
+      <ul class="points">
+        <li><b>Per-process DLL routing.</b> CS2 gets DXMT from its own folder; Steam's Chromium UI gets DXVK, the only path it draws on. No global overrides.</li>
+        <li><b>Persistent Metal pipeline cache.</b> Shaders compile once, not every match.</li>
+        <li><b>Display-aware fullscreen.</b> Reads your primary display at every launch. Smooth renders the scaled size, Sharp flips Wine's Retina mode for real pixels.</li>
+        <li><b>Voice diagnostics.</b> Flags Bluetooth headset mics, switches to the built-in mic in one click, and tests the mic through Wine's own capture path.</li>
+      </ul>
+    </section>
+
+    <section id="install" class="steps">
+      <h2>Install</h2>
+      <ol>
+        <li><b>Install Whisky</b>, the free Wine engine Vaelos runs on, then open it once so it downloads its engine (~480 MB).
+          <code>brew install --cask frankea/whisky/whisky</code></li>
+        <li><b>Download</b> Vaelos-Silicon.dmg above and drag <b>Vaelos Silicon</b> into Applications.</li>
+        <li><b>First launch:</b> this build isn't notarized by Apple yet, so macOS blocks it once. Open
+          <b>System Settings → Privacy &amp; Security</b>, scroll to Security, and click <b>Open Anyway</b>.</li>
+        <li><b>Set up</b> creates the Windows environment and installs Steam from Valve. Log in to Steam,
+          press <b>Play</b>. Steam downloads CS2 (~60 GB) the first time.</li>
+      </ol>
+    </section>
+
+    <section id="verify" class="verify">
+      <h2>Verify your download</h2>
+      <p>Check the file is exactly what was published before you open it:</p>
+      <pre><code>shasum -a 256 ~/Downloads/Vaelos-Silicon.dmg
+5e0689fd56f1a94ea7b54d4af8959d92b5eb387b5fb8f61524ee5b6a401478e1</code></pre>
+      <p>After installing, the signature and its single entitlement (microphone) can be inspected:</p>
+      <pre><code>codesign --verify --strict --verbose=2 "/Applications/Vaelos Silicon.app"
+codesign -d --entitlements - "/Applications/Vaelos Silicon.app"</code></pre>
+      <ul class="points">
+        <li><b>Hardened runtime</b>, ad-hoc signed. No JIT, no unsigned memory, no DYLD exceptions.</li>
+        <li><b>One network request</b>: Steam's installer from Valve's CDN over HTTPS during Setup. No telemetry.</li>
+        <li><b>No admin password</b>, ever. Writes only to its own Application Support folder and Whisky bottle.</li>
+        <li><b>Open source</b>: every line that runs is in the <a href="https://github.com/0xzcr/vaelos-silicon">repository</a>.
+          Report issues privately via <a href="https://github.com/0xzcr/vaelos-silicon/security">GitHub Security</a>.</li>
+      </ul>
+    </section>
+
+    <section class="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Is it safe for my Steam account?</summary>
+        <p>Vaelos never launches CS2 with <code>-insecure</code>, so VAC stays on. Valve doesn't officially support
+          VAC under Wine, though, so play on an account you're comfortable with.</p>
+      </details>
+      <details>
+        <summary>Why does it need Whisky?</summary>
+        <p>Whisky ships a maintained, signed Wine 11 build with DXMT and DXVK. Vaelos drives it directly instead of
+          redistributing it, so you get Whisky's updates and Vaelos stays a 2 MB download.</p>
+      </details>
+      <details>
+        <summary>My teammates hear static.</summary>
+        <p>That's almost always a Bluetooth headset mic: in our tests it broke up just as badly without Wine. Use
+          the built-in mic for input and keep your earbuds for sound; Vaelos does it in one click.</p>
+      </details>
+      <details>
+        <summary>Why the "Open Anyway" step?</summary>
+        <p>Notarization needs a paid Apple Developer ID. Until then the app is ad-hoc signed; the checksum above
+          proves you have the published file.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <p>Vaelos Silicon is free and open source under the MIT license. Not affiliated with Valve, Apple or Whisky.
+      Counter-Strike and Steam are trademarks of Valve Corporation.</p>
+  </footer>
+</body>
+</html>
