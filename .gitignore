@@ -11,3 +11,6 @@ logs/
 # Tooling
 .vercel/
 .DS_Store
+
+# Secrets the Vercel CLI writes locally
+.env*
