@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vaelos Silicon</title>
   <meta name="description" content="Counter-Strike 2 on Apple Silicon. Wine 11 + DXMT Direct3D 11 to Metal, persistent shader cache, Retina-native fullscreen. Free and open source.">
-  <meta name="theme-color" content="#070912">
+  <meta name="theme-color" content="#000000">
   <meta property="og:title" content="Vaelos Silicon">
   <meta property="og:description" content="Counter-Strike 2 on Apple Silicon. Free, open source, one window.">
   <link rel="icon" href="/logo.svg" type="image/svg+xml">
@@ -23,15 +23,14 @@
 
   <main>
     <section class="hero">
-      <img class="hero-logo" src="/logo.svg" alt="Vaelos Silicon logo" width="168" height="168">
-      <p class="eyebrow">CS2 // Wine 11 // D3D11 → Metal</p>
-      <h1>Counter-Strike 2,<br><span class="neon">native-feeling on Apple Silicon.</span></h1>
-      <p class="lede">Vaelos runs the Windows build through Wine on Rosetta 2, translates Direct3D 11 straight to Metal
-        with DXMT, and fixes what makes CS2 feel bad on a Mac: shader stutter, wrong-resolution fullscreen,
-        a black Steam window, and voice chat that sounds like static.</p>
+      <img class="hero-logo" src="/logo.svg" alt="Vaelos Silicon logo" width="96" height="96">
+      <h1>Counter-Strike 2 on Apple Silicon.</h1>
+      <p class="lede">A small Mac app that runs the Windows build of CS2 through Wine and translates Direct3D 11 to
+        Metal with DXMT. It also fixes shader stutter, wrong-resolution fullscreen, the black Steam window, and
+        voice chat static.</p>
       <div class="cta">
         <a class="button" href="https://github.com/0xzcr/vaelos-silicon/releases/latest/download/Vaelos-Silicon.dmg">Download for Mac</a>
-        <span class="meta">v0.1.0 · 2.2 MB · Apple Silicon · macOS 14+ · free, MIT</span>
+        <span class="meta">v0.1.0 · 2.2 MB · macOS 14+ · Apple Silicon · MIT</span>
       </div>
     </section>
 
@@ -45,15 +44,14 @@
 
     <section class="pipeline" aria-label="How it works">
       <h2>Under the hood</h2>
-      <div class="lane">
-        <span class="chip">cs2.exe</span><i>→</i><span class="chip">Wine 11 · Rosetta 2</span><i>→</i><span class="chip accent">DXMT</span><i>→</i><span class="chip">Metal</span><i>→</i><span class="chip">Apple GPU</span>
-      </div>
-      <div class="lane">
-        <span class="chip">steamwebhelper.exe</span><i>→</i><span class="chip accent">DXVK</span><i>→</i><span class="chip">MoltenVK</span><i>→</i><span class="chip">Metal</span>
-      </div>
+      <table>
+        <tr><th>Process</th><th>Graphics path</th></tr>
+        <tr><td><code>cs2.exe</code></td><td>Wine 11 on Rosetta 2, DXMT, Metal</td></tr>
+        <tr><td><code>steamwebhelper.exe</code></td><td>Wine 11 on Rosetta 2, DXVK, MoltenVK, Metal</td></tr>
+      </table>
       <ul class="points">
         <li><b>Per-process DLL routing.</b> CS2 gets DXMT from its own folder; Steam's Chromium UI gets DXVK, the only path it draws on. No global overrides.</li>
-        <li><b>Persistent Metal pipeline cache.</b> Shaders compile once, not every match.</li>
+        <li><b>Persistent shader cache.</b> Shaders compile once instead of every match.</li>
         <li><b>Display-aware fullscreen.</b> Reads your primary display at every launch. Smooth renders the scaled size, Sharp flips Wine's Retina mode for real pixels.</li>
         <li><b>Voice diagnostics.</b> Flags Bluetooth headset mics, switches to the built-in mic in one click, and tests the mic through Wine's own capture path.</li>
       </ul>
