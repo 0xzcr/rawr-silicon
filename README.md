@@ -51,7 +51,7 @@ Full method and every run: [docs/RESULTS.md](docs/RESULTS.md).
 ## Install
 
 1. Download **Vaelos-Silicon.dmg** from [vaelos-silicon.vercel.app](https://vaelos-silicon.vercel.app) or
-   [Releases](https://github.com/0xzcr/vaelos-silicon/releases/latest), and check it:
+   [Releases](https://github.com/0xzcr/rawr-silicon/releases/latest), and check it:
    `shasum -a 256 Vaelos-Silicon.dmg` must match `SHA256SUMS`.
 2. Drag Vaelos Silicon to Applications. The build is ad-hoc signed, not notarized (no paid Apple Developer ID
    yet), so the first launch needs **System Settings → Privacy & Security → Open Anyway**.
