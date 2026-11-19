@@ -43,7 +43,7 @@ check "status.sh prints a known word ($STATUS)" 'echo "$STATUS" | grep -qxE "no-
 OUT="$EMPTY_HOME/download"
 check "download refuses plain HTTP" '! (source scripts/common.sh; download "http://example.com/" "$OUT" 0 test 1) >/dev/null 2>&1'
 check "download refuses a file with the wrong SHA-256" \
-  '[[ "$(source scripts/common.sh; download "https://github.com/0xzcr/vaelos-silicon/releases/download/v0.1.0/SHA256SUMS" "$OUT" 0000 test 1)" == *"ERROR test: the file doesn"*"checksum"* ]]'
+  '[[ "$(source scripts/common.sh; download "https://github.com/0xzcr/rawr-silicon/releases/download/v0.1.0/SHA256SUMS" "$OUT" 0000 test 1)" == *"ERROR test: the file doesn"*"checksum"* ]]'
 
 # Signature check: an Apple app is not "signed by Whisky's team"; the real Whisky is, when installed.
 check "signature check rejects an app from another team" '! (source scripts/common.sh; signed_by_team /System/Applications/Calculator.app Z7JS58F8U3)'
