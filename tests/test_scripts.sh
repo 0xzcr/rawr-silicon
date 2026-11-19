@@ -51,6 +51,18 @@ if [ -d /Applications/Whisky.app ]; then
   check "signature check accepts the real Whisky" '(source scripts/common.sh; signed_by_team /Applications/Whisky.app Z7JS58F8U3)'
 fi
 
+# Leftover detection: finds a process running inside the bottle, ignores one running elsewhere.
+mkdir -p "$BOTTLES/BBBB/drive_c"
+(cd "$BOTTLES/BBBB/drive_c" && exec sleep 60) &
+INSIDE=$!
+(cd "$EMPTY_HOME" && exec sleep 60) &
+OUTSIDE=$!
+sleep 1
+FOUND_PIDS="$(source scripts/common.sh; pids_inside "$BOTTLES/BBBB")"
+check "pids_inside finds a process inside the bottle" 'echo "$FOUND_PIDS" | grep -qx "$INSIDE"'
+check "pids_inside ignores a process outside it" '! echo "$FOUND_PIDS" | grep -qx "$OUTSIDE"'
+kill "$INSIDE" "$OUTSIDE" 2>/dev/null
+
 rm -rf "$FAKE_HOME" "$EMPTY_HOME"
 echo "$([ $FAILURES = 0 ] && echo "all passed" || echo "$FAILURES failed")"
 exit $FAILURES
