@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+- Stop no longer leaves Steam stuck in the Dock: it ends Steam's browser helper when it outlives Wine's server,
+  without touching other Wine setups.
+- Stop takes seconds instead of up to a minute, and no longer starts Steam when it isn't running.
+
 ## 0.2.0
 
 - Set up is fully automatic on a fresh Mac: installs Rosetta 2, Whisky and its Wine engine, then the bottle and Steam.
