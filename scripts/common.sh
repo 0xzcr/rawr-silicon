@@ -91,6 +91,19 @@ find_bottle() {
   return 1
 }
 
+# Prints the PIDs of processes running from inside a folder (their working directory is in it).
+# Catches Wine processes that outlived their wineserver, which `wineserver -k` can no longer reach,
+# without touching other Wine setups such as other apps' prefixes.
+#   pids_inside <folder>
+pids_inside() {
+  # lsof reports resolved paths (/private/var, not /var), so compare against the resolved folder.
+  local folder
+  folder="$(cd "$1" && pwd -P)" || return 0
+  lsof -d cwd -Fpn 2>/dev/null | awk -v folder="$folder/" '
+    /^p/ { pid = substr($0, 2) }
+    /^n/ { if (index(substr($0, 2) "/", folder) == 1) print pid }'
+}
+
 # Points Wine at our bottle. Every script that runs Wine calls this first.
 use_bottle() {
   BOTTLE="$(find_bottle)" || fail "No Whisky bottle named $BOTTLE_NAME yet: run Setup first"
